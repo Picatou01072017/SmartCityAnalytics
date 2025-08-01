@@ -1,0 +1,364 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rapport de projet de Data Engineering (EcommerceAnalytics)</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="📦-ecommerce-analytics-avec-spark--scala">📦 Ecommerce Analytics avec Spark &amp; Scala</h1>
+<p>Projet académique de Master 1 Intelligence Artificielle (DIT)<br>
+<strong>Étudiant : Moussa Mallé</strong><br>
+<strong>Email :</strong> <a href="mailto:mallemoussa091@gmail.com">mallemoussa091@gmail.com</a></p>
+<hr>
+<h2 id="📚-sujet">📚 Sujet</h2>
+<p>Développer un système d’analyse de données e-commerce complet en utilisant Apache Spark avec Scala.</p>
+<p>Objectifs :</p>
+<ul>
+<li>Ingestion de données multi-format (CSV, JSON, Parquet)</li>
+<li>Nettoyage et validation</li>
+<li>Enrichissement avancé via UDF et fonctions de fenêtrage</li>
+<li>Analyse business (KPI, cohortes)</li>
+<li>Optimisations Spark (cache, persist, broadcast)</li>
+<li>Export des résultats en CSV et Parquet</li>
+</ul>
+<hr>
+<h2 id="📁-structure-du-projet">📁 Structure du projet</h2>
+<pre><code>
+EcommerceAnalytics/  
+├── data/ # Fichiers d’entrée  
+├── output/ # Résultats finaux  
+├── src/  
+│ └── main/  
+│ └── scala/com/ecommerce/analytics/  
+│ ├── MainApp.scala  
+│ ├── DataIngestion.scala  
+│ ├── DataTransformation.scala  
+│ ├── Analytics.scala  
+│ └── models.scala  
+├── application.conf # Configuration externe (Typesafe Config)  
+├── build.sbt # Fichier de build SBT  
+└── README.md # Ce document
+
+</code></pre>
+<hr>
+<h2 id="🛠️-prérequis">🛠️ Prérequis</h2>
+<ul>
+<li>Java 11</li>
+<li>Scala 2.11.12</li>
+<li>Spark 2.2.1</li>
+<li>SBT</li>
+<li>Spark (via dépendances <code>spark-core</code>, <code>spark-sql</code>)</li>
+</ul>
+<hr>
+<h2 id="⚙️-configuration">⚙️ Configuration</h2>
+<p>Le fichier <code>application.conf</code> centralise tous les chemins d’entrée/sortie :</p>
+<pre class=" language-hocon"><code class="prism  language-hocon">app {
+  name = "EcommerceAnalytics"
+  env = "dev"
+  spark {
+    master = "local[*]"
+    appName = "EcommerceAnalyticsApp"
+  }
+  data {
+    input {
+      transactions = "data/transactions.csv"
+      merchants = "data/merchants.csv"
+      users = "data/users.json"
+      products = "data/products.parquet"
+    }
+    output {
+      path = "output/results"
+    }
+  }
+}
+
+</code></pre>
+<hr>
+<h2 id="🚀-exécution">🚀 Exécution</h2>
+<ol>
+<li>Cloner le projet :</li>
+</ol>
+<pre class=" language-bash"><code class="prism  language-bash"><span class="token function">git</span> clone https://github.com/codeangel223/DataEngineering-EcommerceAnalytics.git EcommerceAnalytics
+<span class="token function">cd</span> EcommerceAnalytics
+
+</code></pre>
+<ol start="2">
+<li>
+<p>Placer les données dans le dossier <code>data/</code>.</p>
+</li>
+<li>
+<p>Lancer :</p>
+</li>
+</ol>
+<pre class=" language-bash"><code class="prism  language-bash">sbt run
+</code></pre>
+<hr>
+<h2 id="✨-fonctionnalités-implémentées-en-détail">✨ Fonctionnalités Implémentées en Détail</h2>
+<p>Le projet couvre l’ensemble d’un pipeline analytique Spark, structuré en 7 parties, avec implémentation complète et optimisations professionnelles.</p>
+<h3 id="🔧-partie-1-–-configuration--structure-du-projet">🔧 Partie 1 – Configuration &amp; Structure du Projet</h3>
+<ul>
+<li>
+<p>Mise en place d’une <strong>architecture modulaire</strong> : <code>models</code>, <code>analytics</code>, <code>transformation</code>, <code>ingestion</code>, <code>app</code></p>
+</li>
+<li>
+<p>Configuration de <code>build.sbt</code> :</p>
+<ul>
+<li>
+<p>Scala 2.11.12 compatible avec Spark 2.2.1</p>
+</li>
+<li>
+<p>Ajout de <code>spark-core</code>, <code>spark-sql</code>, et <code>typesafe-config</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p>Chargement des paramètres via un fichier <code>application.conf</code> propre</p>
+</li>
+</ul>
+<hr>
+<h3 id="📥-partie-2-–-ingestion--validation-des-données">📥 Partie 2 – Ingestion &amp; Validation des Données</h3>
+<ul>
+<li>
+<p>Lecture multi-format :</p>
+<ul>
+<li>
+<p><code>CSV</code> : transactions &amp; merchants</p>
+</li>
+<li>
+<p><code>JSON</code> : users</p>
+</li>
+<li>
+<p><code>Parquet</code> : products</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Création de <code>case class</code> typées pour chaque entité</p>
+</li>
+<li>
+<p>Validation métier :</p>
+<ul>
+<li>
+<p>Transactions : <code>amount &gt; 0</code>, timestamp de 14 caractères</p>
+</li>
+<li>
+<p>Users : <code>age ∈ [16, 100]</code>, <code>income &gt; 0</code></p>
+</li>
+<li>
+<p>Products : <code>price &gt; 0</code>, <code>rating ∈ [1, 5]</code></p>
+</li>
+<li>
+<p>Merchants : <code>commission_rate ∈ [0, 1]</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p>Gestion d’erreurs :</p>
+<ul>
+<li>
+<p>Try/catch des erreurs de lecture</p>
+</li>
+<li>
+<p>Affichage du nombre de lignes lues &amp; valides</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="🧠-partie-3-–-transformations-avancées">🧠 Partie 3 – Transformations Avancées</h3>
+<ul>
+<li>
+<p><strong>UDF extractTimeFeatures</strong> : à partir d’un timestamp (<code>yyyyMMddHHmmss</code>), calcul des dimensions :</p>
+<ul>
+<li>Heure, jour, mois, <code>is_weekend</code>, <code>is_working_hour</code>, <code>day_period</code></li>
+</ul>
+</li>
+<li>
+<p>Enrichissement des transactions :</p>
+<ul>
+<li>
+<p>Jointure avec users, merchants, products</p>
+</li>
+<li>
+<p>Ajout du <code>rang</code> de transaction par utilisateur (Window)</p>
+</li>
+<li>
+<p>Comptage total de transactions</p>
+</li>
+<li>
+<p>Classification par <strong>tranche d’âge</strong> : Jeune, Adulte, Âge Moyen, Senior</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Détection de comportements par <strong>fenêtre glissante 7 jours</strong> :</p>
+<ul>
+<li>
+<p><code>active_days_7d</code> : nb de jours où un utilisateur a transigé</p>
+</li>
+<li>
+<p><code>is_active_user_7d</code> : flag si ≥ 5 jours actifs sur 7</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="📊-partie-4-–-analytique-business">📊 Partie 4 – Analytique Business</h3>
+<h4 id="✅-rapport-kpi-par-marchand">✅ Rapport KPI par Marchand</h4>
+<ul>
+<li>
+<p>Chiffre d’affaires total, nombre de clients uniques</p>
+</li>
+<li>
+<p>Montant moyen par transaction</p>
+</li>
+<li>
+<p>Commission totale perçue</p>
+</li>
+<li>
+<p>Classement par <strong>CA dans sa catégorie et région</strong> (avec <code>Window</code>)</p>
+</li>
+<li>
+<p>Répartition des ventes par tranche d’âge</p>
+</li>
+</ul>
+<h4 id="📈-analyse-de-cohortes">📈 Analyse de Cohortes</h4>
+<ul>
+<li>
+<p>Identification du mois de <strong>première transaction</strong> (<code>cohort_month</code>)</p>
+</li>
+<li>
+<p>Calcul du taux de <strong>rétention mensuelle</strong></p>
+</li>
+<li>
+<p>Construction d’un tableau croisé cohort_month × transaction_month</p>
+</li>
+</ul>
+<hr>
+<h3 id="🚀-partie-5-–-optimisations-spark">🚀 Partie 5 – Optimisations Spark</h3>
+<ul>
+<li>
+<p><strong>Gestion mémoire</strong> :</p>
+<ul>
+<li>
+<p><code>cache()</code> sur les DataFrame réutilisés</p>
+</li>
+<li>
+<p><code>persist(StorageLevel.MEMORY_AND_DISK_SER)</code> pour les grands volumes</p>
+</li>
+<li>
+<p><code>unpersist()</code> après utilisation</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Optimisation des jointures</strong> :</p>
+<ul>
+<li><code>broadcast()</code> sur <code>merchants</code> pour limiter le shuffle</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="🧩-partie-6-–-application-principale">🧩 Partie 6 – Application Principale</h3>
+<ul>
+<li>
+<p><code>MainApp.scala</code> orchestre :</p>
+<ul>
+<li>
+<p>Ingestion, transformation, analyse</p>
+</li>
+<li>
+<p>Affichage console des résultats</p>
+</li>
+<li>
+<p>Sauvegarde en <strong>CSV</strong> &amp; <strong>Parquet</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>Configuration centralisée (<code>application.conf</code>)</p>
+</li>
+<li>
+<p><code>try/catch/finally</code> pour robustesse</p>
+</li>
+</ul>
+<hr>
+<h3 id="⚙️-partie-7-–-configuration-externalisée">⚙️ Partie 7 – Configuration Externalisée</h3>
+<ul>
+<li>
+<p>Chemins des datasets &amp; sortie définis dans <code>application.conf</code></p>
+</li>
+<li>
+<p>Variables comme le <code>app.name</code> et <code>spark.master</code> modifiables facilement</p>
+</li>
+</ul>
+<hr>
+<p>Souhaites-tu que je mette à jour ton <code>README.md</code> avec cette nouvelle section enrichie ?</p>
+<hr>
+<h2 id="💾-résultats">💾 Résultats</h2>
+<p>Les résultats sont enregistrés en double format :</p>
+<pre><code>output/results/
+├── merchant_report/
+│   ├── csv/
+│   └── parquet/
+└── cohort_report/
+    ├── csv/
+    └── parquet/
+
+</code></pre>
+<hr>
+<h2 id="📊-exemple-de-sorties">📊 Exemple de sorties</h2>
+<h3 id="kpi-par-marchand-">KPI par marchand :</h3>
+<ul>
+<li>
+<p>Chiffre d’affaires total</p>
+</li>
+<li>
+<p>Nombre de clients uniques</p>
+</li>
+<li>
+<p>Montant moyen par transaction</p>
+</li>
+<li>
+<p>Commission totale perçue</p>
+</li>
+<li>
+<p>Répartition par tranche d’âge</p>
+</li>
+<li>
+<p>Rang dans sa catégorie et sa région</p>
+</li>
+</ul>
+<h3 id="analyse-de-cohortes-">Analyse de cohortes :</h3>
+<ul>
+<li>
+<p>Premier mois d’achat de chaque utilisateur</p>
+</li>
+<li>
+<p>Retention mensuelle post-cohorte</p>
+</li>
+</ul>
+<hr>
+<h2 id="👨‍🎓-étudiant">👨‍🎓 Étudiant</h2>
+<ul>
+<li>
+<p><strong>Nom</strong> : Moussa Mallé</p>
+</li>
+<li>
+<p><strong>Email</strong> : <a href="mailto:mallemoussa091@gmail.com">mallemoussa091@gmail.com</a></p>
+</li>
+<li>
+<p><strong>Formation</strong> : Master 1 Intelligence Artificielle – DIT</p>
+</li>
+</ul>
+<hr>
+<h2 id="📄-licence">📄 Licence</h2>
+<p>Projet académique – usage pédagogique uniquement.</p>
+</div>
+</body>
+
+</html>

@@ -2,10 +2,10 @@ package com.ecommerce.models
 
 case class User(
                  user_id: String,
-                 age: Int,
+                 age: BigInt,
                  annual_income: Double,
                  city: String,
                  customer_segment: String,
-                 preferred_categories: Seq[String],
+                 preferred_categories: List[String],
                  registration_date: String
                )

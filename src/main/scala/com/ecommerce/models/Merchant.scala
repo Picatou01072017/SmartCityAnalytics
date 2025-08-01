@@ -5,6 +5,6 @@ case class Merchant(
                      name: String,
                      category: String,
                      region: String,
-                     commission_rate: Double,
+                     commission_rate: String,
                      establishment_date: String
                    )

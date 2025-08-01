@@ -7,5 +7,5 @@ case class Product(
                     price: Double,
                     merchant_id: String,
                     rating: Double,
-                    stock: Int
+                    stock: String
                   )
