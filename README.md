@@ -248,10 +248,6 @@ Le projet couvre l’ensemble d’un pipeline analytique Spark, structuré en 7 
 -   Variables comme le `app.name` et `spark.master` modifiables facilement
 ----------
 
-Souhaites-tu que je mette à jour ton `README.md` avec cette nouvelle section enrichie ?
-
-----------
-
 ## 💾 Résultats
 
 Les résultats sont enregistrés en double format :
