@@ -1,7 +1,7 @@
 // DataTransformation.scala
-package com.ecommerce.analytics
+package com.SmartCityAnalytics.analytics
 
-import com.ecommerce.models._
+import com.SmartCityAnalytics.models._
 import org.apache.spark.sql.{DataFrame, Dataset, SparkSession, functions => F}
 import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.types._

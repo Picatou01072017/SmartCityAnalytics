@@ -1,4 +1,4 @@
-package com.ecommerce.models
+package com.SmartCityAnalytics.models
 
 case class TrafficEvents(
                           event_id: String,

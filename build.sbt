@@ -1,11 +1,11 @@
 // build.sbt — Option B (sbt run)
-ThisBuild / organization := "com.ecommerce"
+ThisBuild / organization := "com.SmartCityAnalytics"
 ThisBuild / scalaVersion := "2.12.18"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 
 name := "SmartCityAnalytics"
 
-Compile / mainClass := Some("com.ecommerce.analytics.MainApp")
+Compile / mainClass := Some("com.SmartCityAnalytics.analytics.MainApp")
 
 // Utile avec Java 17 (modules JDK ouverts pour Spark/Netty/JNA)
 ThisBuild / javaOptions ++= Seq(

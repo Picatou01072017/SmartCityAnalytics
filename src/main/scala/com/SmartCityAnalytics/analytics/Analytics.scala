@@ -1,5 +1,5 @@
 // Analytics.scala
-package com.ecommerce.analytics
+package com.SmartCityAnalytics.analytics
 
 import org.apache.spark.sql.{DataFrame, SparkSession, functions => F}
 import org.apache.spark.sql.expressions.Window

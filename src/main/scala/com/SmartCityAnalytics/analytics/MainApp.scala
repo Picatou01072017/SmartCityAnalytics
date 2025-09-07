@@ -1,5 +1,5 @@
 // MainApp.scala
-package com.ecommerce.analytics
+package com.SmartCityAnalytics.analytics
 
 import org.apache.spark.sql.{SparkSession, DataFrame}
 import org.apache.spark.storage.StorageLevel

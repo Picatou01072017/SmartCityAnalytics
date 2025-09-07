@@ -1,8 +1,8 @@
-// src/main/scala/com/ecommerce/analytics/DataIngestion.scala
-package com.ecommerce.analytics
+// src/main/scala/com/SmartCityAnalytics/analytics/DataIngestion.scala
+package com.SmartCityAnalytics.analytics
 
 import org.apache.spark.sql.{Dataset, SparkSession, functions => F}
-import com.ecommerce.models._
+import com.SmartCityAnalytics.models._
 import com.typesafe.config.ConfigFactory
 
 object DataIngestion {
@@ -11,6 +11,15 @@ object DataIngestion {
 
   private def report(name: String, total: Long, valid: Long): Unit =
     println(s"[$name] Lignes lues : $total | Lignes valides : $valid")
+
+  // Helpers lisibles pour les Option[…]
+  private def nonEmpty(s: String): Boolean = s != null && s.nonEmpty
+  private def nonNeg(o: Option[Double]): Boolean = o.forall(_ >= 0.0)
+  private def nonNegI(o: Option[Int]): Boolean = o.forall(_ >= 0)
+  private def inRange(o: Option[Double], min: Double, max: Double): Boolean =
+    o.forall(v => v >= min && v <= max)
+  private def between(o: Option[Double], min: Double, max: Double): Boolean =
+    o.forall(v => v > min && v < max)
 
   // ---------------------------
   // CityZones (CSV avec header)
@@ -33,8 +42,8 @@ object DataIngestion {
       ).as[CityZones]
 
       val valid = ds.filter(z =>
-        Option(z.zone_id).exists(_.nonEmpty) &&
-          Option(z.zone_name).exists(_.nonEmpty) &&
+        nonEmpty(z.zone_id) &&
+          nonEmpty(z.zone_name) &&
           z.population.bigInteger.signum() > 0 &&
           z.area_km2 > 0.0
       )
@@ -48,7 +57,7 @@ object DataIngestion {
   }
 
   // ---------------------------
-  // Sensors (JSON, champs déjà OK)
+  // Sensors (JSON)
   // ---------------------------
   def readSensors(spark: SparkSession): Dataset[Sensors] = {
     import spark.implicits._
@@ -68,8 +77,8 @@ object DataIngestion {
       ).as[Sensors]
 
       val valid = ds.filter(s =>
-        Option(s.sensor_id).exists(_.nonEmpty) &&
-          Option(s.zone_id).exists(_.nonEmpty) &&
+        nonEmpty(s.sensor_id) &&
+          nonEmpty(s.zone_id) &&
           s.latitude >= -90 && s.latitude <= 90 &&
           s.longitude >= -180 && s.longitude <= 180
       )
@@ -83,7 +92,9 @@ object DataIngestion {
   }
 
   // ---------------------------
-  // TrafficEvents (Parquet, champs déjà OK)
+  // TrafficEvents (Parquet)
+  // NOTE: ce code part du principe que les champs
+  // vehicle_count / avg_speed / traffic_density sont Option[…]
   // ---------------------------
   def readTrafficEvents(spark: SparkSession): Dataset[TrafficEvents] = {
     import spark.implicits._
@@ -95,7 +106,7 @@ object DataIngestion {
       val ds = raw.select(
         F.col("event_id").cast("string"),
         F.col("sensor_id").cast("string"),
-        // BigInt ⇒ via Decimal(38,0) (au cas où le parquet stocke string/long)
+        // BigInt ⇒ via Decimal(38,0)
         F.col("timestamp").cast("decimal(38,0)").as("timestamp"),
         F.col("vehicle_count").cast("int"),
         F.col("avg_speed").cast("double"),
@@ -104,11 +115,11 @@ object DataIngestion {
       ).as[TrafficEvents]
 
       val valid = ds.filter(te =>
-        Option(te.event_id).exists(_.nonEmpty) &&
-          Option(te.sensor_id).exists(_.nonEmpty) &&
-          te.vehicle_count >= 0 &&
-          te.avg_speed >= 0.0 &&
-          te.traffic_density >= 0.0 && te.traffic_density <= 1.0
+        nonEmpty(te.event_id) &&
+          nonEmpty(te.sensor_id) &&
+          nonNegI(te.vehicle_count) &&
+          nonNeg(te.avg_speed) &&
+          inRange(te.traffic_density, 0.0, 1.0)
       )
 
       report("TrafficEvents", total, valid.count())
@@ -121,6 +132,8 @@ object DataIngestion {
 
   // ---------------------------
   // Weather (CSV avec header)
+  // NOTE: ce code part du principe que temperature,
+  // humidity, pressure, wind_speed, rainfall sont Option[…]
   // ---------------------------
   def readWeather(spark: SparkSession): Dataset[Weather] = {
     import spark.implicits._
@@ -142,11 +155,14 @@ object DataIngestion {
       ).as[Weather]
 
       val valid = ds.filter(w =>
-        Option(w.reading_id).exists(_.nonEmpty) &&
-          Option(w.sensor_id).exists(_.nonEmpty) &&
-          w.humidity >= 0 && w.humidity <= 100 &&
-          w.pressure > 500 && w.pressure < 1200 &&
-          w.wind_speed >= 0 && w.rainfall >= 0
+        nonEmpty(w.reading_id) &&
+          nonEmpty(w.sensor_id) &&
+          inRange(w.humidity, 0.0, 100.0) &&
+          between(w.pressure, 500.0, 1200.0) &&
+          nonNeg(w.wind_speed) &&
+          nonNeg(w.rainfall)
+        // (optionnel) filtrage température plausible :
+        // inRange(w.temperature, -60.0, 60.0)
       )
 
       report("Weather", total, valid.count())

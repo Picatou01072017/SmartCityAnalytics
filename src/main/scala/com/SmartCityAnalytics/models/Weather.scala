@@ -1,4 +1,4 @@
-package com.ecommerce.models
+package com.SmartCityAnalytics.models
 
 case class Weather(
                     reading_id: String,
