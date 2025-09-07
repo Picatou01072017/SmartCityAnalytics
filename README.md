@@ -22,14 +22,15 @@ Développer un système d’analyse de données urbaines (« Smart City ») en u
 ---
 
 ## 📁 Structure du projet
-```
+
+```hocon
 
 SmartCityAnalytics/
 ├── data/                 # Fichiers d’entrée
 ├── output/               # Résultats finaux
 ├── src/
 │   └── main/
-│       └── scala/com/ecommerce/analytics/
+│       └── scala/com/SmartCityAnalytics/analytics/
 │           ├── MainApp.scala
 │           ├── DataIngestion.scala
 │           ├── DataTransformation.scala
