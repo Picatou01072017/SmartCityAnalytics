@@ -1,0 +1,16 @@
+zone_id,zone_name,zone_type,population,area_km2,district
+Z_01,Centre Ville,COMMERCIAL,15000,2.5,1er Arrondissement
+Z_02,Quartier Latin,RESIDENTIAL,12000,3.2,5ème Arrondissement
+Z_03,Tour Eiffel,COMMERCIAL,8000,4.1,7ème Arrondissement
+Z_04,Arc de Triomphe,COMMERCIAL,10000,3.8,8ème Arrondissement
+Z_05,Bastille,RESIDENTIAL,18000,2.9,11ème Arrondissement
+Z_06,Notre Dame,COMMERCIAL,6000,1.8,4ème Arrondissement
+Z_07,Trocadéro,RESIDENTIAL,9000,3.5,16ème Arrondissement
+Z_08,Panthéon,RESIDENTIAL,11000,2.7,5ème Arrondissement
+Z_09,Montmartre,COMMERCIAL,13000,4.0,18ème Arrondissement
+Z_10,République,RESIDENTIAL,16000,3.1,3ème Arrondissement
+Z_11,Belleville,RESIDENTIAL,20000,5.2,20ème Arrondissement
+Z_12,Zone Industrielle Nord,INDUSTRIAL,2000,8.5,19ème Arrondissement
+Z_13,Parc Vincennes,PARK,500,9.9,12ème Arrondissement
+Z_14,Parc Boulogne,PARK,800,8.4,16ème Arrondissement
+Z_15,La Défense,COMMERCIAL,25000,6.0,92ème Département

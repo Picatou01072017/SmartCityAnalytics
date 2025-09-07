@@ -1,0 +1,14 @@
+Apres le update du build.sbt avec l'integration des deps:
+    Il faut une installation effective:
+        sbt reload
+        sbt clean
+        sbt update
+
+
+Mapping:
+    app.conf est l'equivalent des variables d'environnement
+    build.sbt -> package.json sur nodejs (ou on gere la version du projet, les deps....)
+
+
+Blocage :
+    Probleme d'utilsation avec le .parquet

@@ -1,0 +1,182 @@
+[
+  {
+    "sensor_id": "S_001",
+    "sensor_type": "TEMPERATURE",
+    "zone_id": "Z_01",
+    "installation_date": "20220315",
+    "latitude": 48.8566,
+    "longitude": 2.3522,
+    "status": "ACTIVE"
+  },
+  {
+    "sensor_id": "S_002",
+    "sensor_type": "HUMIDITY",
+    "zone_id": "Z_01",
+    "installation_date": "20220315",
+    "latitude": 48.8567,
+    "longitude": 2.3523,
+    "status": "ACTIVE"
+  },
+  {
+    "sensor_id": "S_003",
+    "sensor_type": "AIR_QUALITY",
+    "zone_id": "Z_02",
+    "installation_date": "20220420",
+    "latitude": 48.8606,
+    "longitude": 2.3376,
+    "status": "ACTIVE"
+  },
+  {
+    "sensor_id": "S_004",
+    "sensor_type": "NOISE",
+    "zone_id": "Z_02",
+    "installation_date": "20220420",
+    "latitude": 48.8607,
+    "longitude": 2.3377,
+    "status": "MAINTENANCE"
+  },
+  {
+    "sensor_id": "S_005",
+    "sensor_type": "TRAFFIC",
+    "zone_id": "Z_03",
+    "installation_date": "20220510",
+    "latitude": 48.8698,
+    "longitude": 2.3080,
+    "status": "ACTIVE"
+  },
+  {
+    "sensor_id": "S_006",
+    "sensor_type": "TEMPERATURE",
+    "zone_id": "Z_03",
+    "installation_date": "20220510",
+    "latitude": 48.8699,
+    "longitude": 2.3081,
+    "status": "ACTIVE"
+  },
+  {
+    "sensor_id": "S_007",
+    "sensor_type": "HUMIDITY",
+    "zone_id": "Z_04",
+    "installation_date": "20220615",
+    "latitude": 48.8738,
+    "longitude": 2.2950,
+    "status": "ACTIVE"
+  },
+  {
+    "sensor_id": "S_008",
+    "sensor_type": "AIR_QUALITY",
+    "zone_id": "Z_04",
+    "installation_date": "20220615",
+    "latitude": 48.8739,
+    "longitude": 2.2951,
+    "status": "OFFLINE"
+  },
+  {
+    "sensor_id": "S_009",
+    "sensor_type": "TRAFFIC",
+    "zone_id": "Z_05",
+    "installation_date": "20220720",
+    "latitude": 48.8448,
+    "longitude": 2.3749,
+    "status": "ACTIVE"
+  },
+  {
+    "sensor_id": "S_010",
+    "sensor_type": "NOISE",
+    "zone_id": "Z_05",
+    "installation_date": "20220720",
+    "latitude": 48.8449,
+    "longitude": 2.3750,
+    "status": "ACTIVE"
+  },
+  {
+    "sensor_id": "S_011",
+    "sensor_type": "TEMPERATURE",
+    "zone_id": "Z_06",
+    "installation_date": "20220825",
+    "latitude": 48.8534,
+    "longitude": 2.3488,
+    "status": "ACTIVE"
+  },
+  {
+    "sensor_id": "S_012",
+    "sensor_type": "HUMIDITY",
+    "zone_id": "Z_06",
+    "installation_date": "20220825",
+    "latitude": 48.8535,
+    "longitude": 2.3489,
+    "status": "ACTIVE"
+  },
+  {
+    "sensor_id": "S_013",
+    "sensor_type": "AIR_QUALITY",
+    "zone_id": "Z_07",
+    "installation_date": "20220920",
+    "latitude": 48.8584,
+    "longitude": 2.2945,
+    "status": "ACTIVE"
+  },
+  {
+    "sensor_id": "S_014",
+    "sensor_type": "TRAFFIC",
+    "zone_id": "Z_07",
+    "installation_date": "20220920",
+    "latitude": 48.8585,
+    "longitude": 2.2946,
+    "status": "ACTIVE"
+  },
+  {
+    "sensor_id": "S_015",
+    "sensor_type": "NOISE",
+    "zone_id": "Z_08",
+    "installation_date": "20221015",
+    "latitude": 48.8469,
+    "longitude": 2.3412,
+    "status": "ACTIVE"
+  },
+  {
+    "sensor_id": "S_016",
+    "sensor_type": "TEMPERATURE",
+    "zone_id": "Z_08",
+    "installation_date": "20221015",
+    "latitude": 48.8470,
+    "longitude": 2.3413,
+    "status": "MAINTENANCE"
+  },
+  {
+    "sensor_id": "S_017",
+    "sensor_type": "HUMIDITY",
+    "zone_id": "Z_09",
+    "installation_date": "20221120",
+    "latitude": 48.8763,
+    "longitude": 2.3200,
+    "status": "ACTIVE"
+  },
+  {
+    "sensor_id": "S_018",
+    "sensor_type": "AIR_QUALITY",
+    "zone_id": "Z_09",
+    "installation_date": "20221120",
+    "latitude": 48.8764,
+    "longitude": 2.3201,
+    "status": "ACTIVE"
+  },
+  {
+    "sensor_id": "S_019",
+    "sensor_type": "TRAFFIC",
+    "zone_id": "Z_10",
+    "installation_date": "20221215",
+    "latitude": 48.8411,
+    "longitude": 2.3556,
+    "status": "ACTIVE"
+  },
+  {
+    "sensor_id": "S_020",
+    "sensor_type": "NOISE",
+    "zone_id": "Z_10",
+    "installation_date": "20221215",
+    "latitude": 48.8412,
+    "longitude": 2.3557,
+    "status": "ACTIVE"
+  }
+]

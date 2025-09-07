@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport de projet de Data Engineering (SmartCityAnalytics)</title>
+    <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+<div class="stackedit__html">
+    <h1 id="📦-smartcity-analytics-avec-spark--scala">📦 SmartCity Analytics avec Spark &amp; Scala</h1>
+    <p>Projet académique de Master 1 Intelligence Artificielle (DIT)<br>
+        <strong>Étudiant : Moussa Mallé</strong><br>
+        <strong>Email :</strong> <a href="mailto:mallemoussa091@gmail.com">mallemoussa091@gmail.com</a></p>
+    <hr>
+
+    <h2 id="📚-sujet">📚 Sujet</h2>
+    <p>Développer un système d’analyse de données Smart City complet en utilisant Apache Spark avec Scala.</p>
+    <p>Objectifs :</p>
+    <ul>
+        <li>Ingestion de données multi-format (CSV, JSON, Parquet)</li>
+        <li>Nettoyage et validation</li>
+        <li>Enrichissement avancé via UDF et fonctions de fenêtrage</li>
+        <li>Analytique Smart City (KPI zones, capteurs, cohortes)</li>
+        <li>Optimisations Spark (cache, persist, broadcast)</li>
+        <li>Export des résultats en CSV et Parquet</li>
+    </ul>
+    <hr>
+
+    <h2 id="📁-structure-du-projet">📁 Structure du projet</h2>
+    <pre><code>
+SmartCityAnalytics/
+├── data/ # Fichiers d’entrée
+├── output/ # Résultats finaux
+├── src/
+│ └── main/
+│    └── scala/com/smartcity/analytics/
+│       ├── MainApp.scala
+│       ├── DataIngestion.scala
+│       ├── DataTransformation.scala
+│       ├── Analytics.scala
+│       └── models/
+│           ├── CityZones.scala
+│           ├── Sensors.scala
+│           ├── TrafficEvents.scala
+│           └── Weather.scala
+├── application.conf # Configuration externe (Typesafe Config)
+├── build.sbt # Fichier de build SBT
+└── README.md # Ce document
+</code></pre>
+    <hr>
+
+    <h2 id="🛠️-prérequis">🛠️ Prérequis</h2>
+    <ul>
+        <li>Java 17</li>
+        <li>Scala 2.12.18</li>
+        <li>Spark 3.5.1</li>
+        <li>SBT</li>
+        <li>Spark (via dépendances <code>spark-core</code>, <code>spark-sql</code>)</li>
+    </ul>
+    <hr>
+
+    <h2 id="⚙️-configuration">⚙️ Configuration</h2>
+    <p>Le fichier <code>application.conf</code> centralise tous les chemins d’entrée/sortie :</p>
+    <pre class=" language-hocon"><code class="prism  language-hocon">app {
+  name = "SmartCityAnalytics"
+  env = "dev"
+  spark {
+    master = "local[*]"
+    appName = "SmartCityAnalyticsApp"
+  }
+  data {
+    input {
+      city_zones     = "data/city_zones.csv"
+      sensors        = "data/sensors.json"
+      traffic_events = "data/traffic_events.csv"
+      weather        = "data/weather.parquet"
+    }
+    output {
+      path = "output/results"
+    }
+  }
+}
+</code></pre>
+    <hr>
+
+    <h2 id="🚀-exécution">🚀 Exécution</h2>
+    <ol>
+        <li>Cloner le projet :</li>
+    </ol>
+    <pre class=" language-bash"><code class="prism  language-bash">git clone https://github.com/codeangel223/SmartCityAnalytics.git
+cd SmartCityAnalytics
+</code></pre>
+    <ol start="2">
+        <li>Placer les données dans le dossier <code>data/</code>.</li>
+        <li>Lancer :</li>
+    </ol>
+    <pre class=" language-bash"><code class="prism  language-bash">sbt run
+</code></pre>
+    <hr>
+
+    <h2 id="✨-fonctionnalités-implémentées-en-détail">✨ Fonctionnalités Implémentées en Détail</h2>
+    <h3 id="🔧-partie-1">🔧 Partie 1 – Configuration &amp; Structure du Projet</h3>
+    <ul>
+        <li>Architecture modulaire : ingestion, transformation, analytics, models, app</li>
+        <li>Configuration de <code>build.sbt</code> :
+            <ul>
+                <li>Scala 2.12.18 compatible avec Spark 3.5.1</li>
+                <li>Dépendances : <code>spark-core</code>, <code>spark-sql</code>, <code>typesafe-config</code></li>
+            </ul>
+        </li>
+        <li>Chargement des paramètres via <code>application.conf</code></li>
+    </ul>
+    <hr>
+
+    <h3 id="📥-partie-2">📥 Partie 2 – Ingestion &amp; Validation des Données</h3>
+    <ul>
+        <li>Lecture multi-format :
+            <ul>
+                <li><code>CSV</code> : city_zones &amp; traffic_events</li>
+                <li><code>JSON</code> : sensors</li>
+                <li><code>Parquet</code> : weather</li>
+            </ul>
+        </li>
+        <li>Validation métier :
+            <ul>
+                <li>CityZones : <code>population &gt; 0</code>, <code>area_km2 &gt; 0</code></li>
+                <li>Sensors : coordonnées valides, statut correct</li>
+                <li>TrafficEvents : <code>vehicle_count ≥ 0</code>, <code>avg_speed ≥ 0</code></li>
+                <li>Weather : valeurs physiques réalistes</li>
+            </ul>
+        </li>
+    </ul>
+    <hr>
+
+    <h3 id="🧠-partie-3">🧠 Partie 3 – Transformations Avancées</h3>
+    <ul>
+        <li>Extraction de dimensions temporelles (heure, jour, mois, week-end, etc.)</li>
+        <li>Jointures : TrafficEvents + Sensors + CityZones + Weather</li>
+        <li>Fenêtres analytiques (rolling average, sliding windows)</li>
+    </ul>
+    <hr>
+
+    <h3 id="📊-partie-4">📊 Partie 4 – Analytique Smart City</h3>
+    <h4>✅ KPI par Zone</h4>
+    <ul>
+        <li>Volume de trafic, vitesse moyenne, densité</li>
+        <li>Taux et types d’incidents</li>
+        <li>Indicateurs météo associés</li>
+        <li>Classement par district</li>
+    </ul>
+    <h4>📈 Analyse de Cohortes de Capteurs</h4>
+    <ul>
+        <li>Mois de première activité de chaque capteur</li>
+        <li>Rétention mensuelle</li>
+        <li>Évolution par cohortes</li>
+    </ul>
+    <hr>
+
+    <h3 id="🚀-partie-5">🚀 Partie 5 – Optimisations Spark</h3>
+    <ul>
+        <li>Gestion mémoire : <code>cache()</code>, <code>persist()</code>, <code>unpersist()</code></li>
+        <li>Optimisation des jointures : <code>broadcast()</code> sur CityZones</li>
+    </ul>
+    <hr>
+
+    <h3 id="🧩-partie-6">🧩 Partie 6 – Application Principale</h3>
+    <ul>
+        <li><code>MainApp.scala</code> orchestre ingestion, transformation, analyse</li>
+        <li>Affichage console + sauvegarde CSV/Parquet</li>
+        <li>Gestion d’erreurs robuste</li>
+    </ul>
+    <hr>
+
+    <h3 id="⚙️-partie-7">⚙️ Partie 7 – Configuration Externalisée</h3>
+    <ul>
+        <li>Chemins d’entrée/sortie définis dans <code>application.conf</code></li>
+        <li>Paramètres Spark modifiables facilement</li>
+    </ul>
+    <hr>
+
+    <h2 id="💾-résultats">💾 Résultats</h2>
+    <pre><code>output/results/
+├── zone_kpi_report/
+│   ├── csv/
+│   └── parquet/
+├── sensor_kpi_report/
+│   ├── csv/
+│   └── parquet/
+└── cohort_report/
+    ├── csv/
+    └── parquet/
+</code></pre>
+    <hr>
+
+    <h2 id="📊-exemple-de-sorties">📊 Exemple de sorties</h2>
+    <h3>KPI par zone :</h3>
+    <ul>
+        <li>Volume total de trafic</li>
+        <li>Vitesse moyenne</li>
+        <li>Taux d’incidents</li>
+        <li>Classement par district</li>
+    </ul>
+    <h3>Analyse de cohortes :</h3>
+    <ul>
+        <li>Premier mois d’activité de chaque capteur</li>
+        <li>Rétention mensuelle</li>
+    </ul>
+    <hr>
+
+    <h2 id="👨‍🎓-étudiant">👨‍🎓 Étudiant</h2>
+    <ul>
+        <li><strong>Nom</strong> : Moussa Mallé</li>
+        <li><strong>Email</strong> : <a href="mailto:mallemoussa091@gmail.com">mallemoussa091@gmail.com</a></li>
+        <li><strong>Formation</strong> : Master 1 Intelligence Artificielle – DIT</li>
+    </ul>
+    <hr>
+
+    <h2 id="📄-licence">📄 Licence</h2>
+    <p>Projet académique – usage pédagogique uniquement.</p>
+</div>
+</body>
+
+</html>

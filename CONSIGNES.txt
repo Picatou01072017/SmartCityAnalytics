@@ -1,0 +1,28 @@
+Projet Final à rendre d'ici le 01 Aout Vendredi à 00h
+Bonjour à tous
+
+Vous trouverez ci-joint le sujet du projet final Spark Scala, dans le cadre du module Data Engineer.
+Développer un système complet d’analyse de données e-commerce, de l’ingestion jusqu’à l’analyse avancée, en utilisant Apache Spark avec Scala.
+
+Contenu du projet :
+Configuration du projet avec SBT
+Ingestion multi-format (CSV, JSON, Parquet)
+Validation et nettoyage des données
+Transformations avancées (UDF, fenêtrage)
+Analytique business (KPI, cohortes)
+Optimisations Spark (cache, broadcast)
+
+Durée estimée : 5 jours
+Je vous recommande de bien suivre les instructions et de structurer votre projet conformément à l’arborescence fournie.
+N’hésitez pas à me poser vos questions si certains points nécessitent clarification.
+
+Chaque étudiant présentera son projet individuellement, à tour de rôle. Un temps maximum de 10 minutes sera accordé à chacun.
+
+Avec 35 étudiants évalués, cela représente environ 5 heures au total de présentations (35 × 10 minutes ÷ 60).
+
+
+Les deux dernières séances de cours seront donc entièrement réservées à ces présentations.
+
+NB: Aucun projet ne sera accepté au-delà du 1 août 2025. Passé ce délai, toute soumission sera considérée comme hors délai et automatiquement refusée.
+
+Bonne chance à tous et bon courage !
